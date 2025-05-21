@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <title>Форма з валідацією</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      padding: 20px;
+    }
+    form {
+      background: #fff;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #333;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="number"] {
+      width: 100%;
+      padding: 8px 10px;
+      margin-bottom: 15px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: border-color 0.3s;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="number"]:focus {
+      border-color: #007BFF;
+      outline: none;
+    }
+    .error {
+      color: #d8000c;
+      background-color: #ffbaba;
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="myForm" novalidate>
+    <div id="errorMessages"></div>
+
+    <label for="name">Ім'я *</label>
+    <input type="text" id="name" name="name" required />
+
+    <label for="email">Email *</label>
+    <input type="email" id="email" name="email" required />
+
+    <label for="age">Вік *</label>
+    <input type="number" id="age" name="age" min="1" required />
+
+    <button type="submit">Відправити</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('myForm');
+    const errorDiv = document.getElementById('errorMessages');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault(); 
+      errorDiv.innerHTML = ''; 
+
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const age = form.age.value.trim();
+
+      let errors = [];
+
+      if (name === '') {
+        errors.push("Поле Ім'я обов'язкове.");
+      }
+
+      if (email === '') {
+        errors.push("Поле Email обов'язкове.");
+      } else if (!email.includes('@')) {
+        errors.push("Email має містити '@'.");
+      }
+
+      const ageNum = Number(age);
+      if (age === '') {
+        errors.push("Поле Вік обов'язкове.");
+      } else if (isNaN(ageNum) || ageNum <= 0) {
+        errors.push("Вік має бути числом більше 0.");
+      }
+
+      if (errors.length > 0) {
+
+        errorDiv.innerHTML = errors.map(e => `<div class="error">${e}</div>`).join('');
+      } else {
+        alert("Form submitted!");
+        form.reset();
+      }
+    });
+  </script>
+
+</body>
+</html>
